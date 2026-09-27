@@ -1,0 +1,610 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | StudyFlow AI</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Global StudyFlow CSS -->
+    <link rel="stylesheet"
+          href="{% static 'planner/style.css' %}">
+
+    <style>
+        .welcome-section {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border-radius: 22px;
+            padding: 32px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+            box-shadow: 0 12px 35px rgba(79, 70, 229, 0.20);
+        }
+
+        .welcome-text h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .welcome-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            flex-shrink: 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 22px;
+            margin-top: 22px;
+        }
+
+        .section-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title-left i {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .section-title h2 {
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        .view-link {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #eef0f4;
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: var(--primary-light);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 14px;
+            font-weight: 650;
+            margin-bottom: 4px;
+        }
+
+        .task-meta {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .empty-dashboard {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--muted);
+        }
+
+        .empty-dashboard i {
+            display: block;
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #a5acd0;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .quick-action {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 15px;
+            background: #fafbff;
+            border: 1px solid #e7e9f2;
+            border-radius: 13px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 650;
+            transition: 0.2s ease;
+        }
+
+        .quick-action:hover {
+            background: var(--primary-light);
+            border-color: #dfe3ff;
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .quick-action i {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .ai-cta {
+            margin-top: 22px;
+            background: linear-gradient(135deg, #eef2ff, #f5f3ff);
+            border: 1px solid #dfe3ff;
+            border-radius: 18px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .ai-cta-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ai-cta-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .ai-cta h3 {
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .ai-cta p {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 25px;
+            }
+
+            .welcome-text h1 {
+                font-size: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .welcome-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .welcome-icon {
+                display: none;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-cta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <a href="{% url 'dashboard' %}" class="nav-brand">
+        <i class="fas fa-graduation-cap"></i>
+        <span>StudyFlow AI</span>
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}" class="nav-btn active">
+            <i class="fas fa-chart-pie"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{% url 'subjects' %}" class="nav-btn">
+            <i class="fas fa-book-open"></i>
+            <span>Subjects</span>
+        </a>
+
+        <a href="{% url 'tasks' %}" class="nav-btn">
+            <i class="fas fa-list-check"></i>
+            <span>Tasks</span>
+        </a>
+
+        <a href="{% url 'ai_planner' %}" class="nav-btn ai-btn">
+            <i class="fas fa-wand-magic-sparkles"></i>
+            <span>AI Planner</span>
+        </a>
+
+        <a href="{% url 'saved_plans' %}" class="nav-btn">
+            <i class="fas fa-folder-open"></i>
+            <span>My Plans</span>
+        </a>
+
+        <a href="{% url 'settings' %}" class="nav-btn">
+            <i class="fas fa-gear"></i>
+            <span>Settings</span>
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-btn logout-btn">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="page-container">
+
+    <!-- Welcome -->
+
+    <section class="welcome-section">
+
+        <div class="welcome-text">
+
+            <h1>
+                Hey,
+                {% if user.first_name %}
+                    {{ user.first_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+                👋
+            </h1>
+
+            <p>
+                Welcome back to StudyFlow AI.
+                Let's make today's study session productive.
+            </p>
+
+        </div>
+
+        <div class="welcome-icon">
+            <i class="fas fa-brain"></i>
+        </div>
+
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-book"></i>
+            </div>
+
+            <div class="stat-number">
+                {{ subject_count|default:"0" }}
+            </div>
+
+            <div class="stat-label">
+                Subjects
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-list-check"></i>
+            </div>
+
+            <div class="stat-number">
+                {{ task_count|default:"0" }}
+            </div>
+
+            <div class="stat-label">
+                Today's Tasks
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-circle-check"></i>
+            </div>
+
+            <div class="stat-number">
+                {{ completed_tasks|default:"0" }}
+            </div>
+
+            <div class="stat-label">
+                Completed Tasks
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+
+            <div class="stat-number">
+                {{ study_hours|default:"0" }}h
+            </div>
+
+            <div class="stat-label">
+                Study Time
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CONTENT ================= -->
+
+    <div class="dashboard-grid">
+
+        <!-- Today's Tasks -->
+
+        <section class="section-card">
+
+            <div class="section-title">
+
+                <div class="section-title-left">
+                    <i class="fas fa-calendar-day"></i>
+
+                    <h2>Today's Tasks</h2>
+                </div>
+
+                <a href="{% url 'tasks' %}" class="view-link">
+                    View all →
+                </a>
+
+            </div>
+
+
+            {% if today_tasks %}
+
+                {% for task in today_tasks %}
+
+                    <div class="task-item">
+
+                        <div class="task-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+
+                        <div class="task-info">
+
+                            <div class="task-title">
+                                {{ task.title }}
+                            </div>
+
+                            <div class="task-meta">
+
+                                {% if task.subject %}
+                                    {{ task.subject.name }} •
+                                {% endif %}
+
+                                {{ task.duration }} min
+
+                            </div>
+
+                        </div>
+
+
+                        {% if task.status == "Completed" %}
+
+                            <span class="badge badge-success">
+                                Completed
+                            </span>
+
+                        {% elif task.priority == "High" %}
+
+                            <span class="badge badge-danger">
+                                High
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-primary">
+                                {{ task.status }}
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-dashboard">
+
+                    <i class="fas fa-mug-hot"></i>
+
+                    <p>No tasks for today.</p>
+
+                    <a href="{% url 'tasks' %}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Task
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- Quick Actions -->
+
+        <section class="section-card">
+
+            <div class="section-title">
+
+                <div class="section-title-left">
+                    <i class="fas fa-bolt"></i>
+
+                    <h2>Quick Actions</h2>
+                </div>
+
+            </div>
+
+
+            <div class="quick-actions">
+
+                <a href="{% url 'subjects' %}" class="quick-action">
+                    <i class="fas fa-plus"></i>
+                    Add Subject
+                </a>
+
+                <a href="{% url 'tasks' %}" class="quick-action">
+                    <i class="fas fa-calendar-plus"></i>
+                    Add Task
+                </a>
+
+                <a href="{% url 'ai_planner' %}" class="quick-action">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    Create AI Plan
+                </a>
+
+                <a href="{% url 'saved_plans' %}" class="quick-action">
+                    <i class="fas fa-folder-open"></i>
+                    My Plans
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- ================= AI CTA ================= -->
+
+    <section class="ai-cta">
+
+        <div class="ai-cta-content">
+
+            <div class="ai-cta-icon">
+                <i class="fas fa-wand-magic-sparkles"></i>
+            </div>
+
+            <div>
+
+                <h3>
+                    Need help planning your studies?
+                </h3>
+
+                <p>
+                    Let StudyFlow AI create a personalized
+                    study plan based on your subjects and exam.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a href="{% url 'ai_planner' %}" class="btn btn-primary">
+
+            <i class="fas fa-sparkles"></i>
+
+            Generate Plan
+
+        </a>
+
+    </section>
+
+</main>
+
+</body>
+</html>

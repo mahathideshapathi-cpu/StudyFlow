@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Study Planner - StudyFlow AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f6fb;
+            color: #222;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            background: white;
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #5b4bdb;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #5b4bdb;
+        }
+
+        .logout-btn {
+            background: #f1efff;
+            color: #5b4bdb;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background: #e4e0ff;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 45px auto;
+        }
+
+
+        /* =========================
+           PAGE HEADER
+        ========================= */
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .ai-badge {
+            display: inline-block;
+            background: #ebe8ff;
+            color: #5b4bdb;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 38px;
+        }
+
+        .header p {
+            color: #777;
+            font-size: 16px;
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           CARD
+        ========================= */
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+        }
+
+
+        /* =========================
+           FORM
+        ========================= */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #6c63ff;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.08);
+        }
+
+        .help-text {
+            color: #888;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+
+        /* =========================
+           GENERATE BUTTON
+        ========================= */
+
+        .generate-btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #6c63ff;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .generate-btn:hover {
+            background: #574ee8;
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error {
+            background: #fff0f0;
+            color: #c62828;
+            border: 1px solid #ffcaca;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           PLAN HEADER
+        ========================= */
+
+        .plan-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .plan-title {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .generated {
+            background: #e7f8ef;
+            color: #16834a;
+            padding: 8px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .summary-card {
+            background: #f8f8ff;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #eeeeff;
+        }
+
+        .summary-label {
+            font-size: 11px;
+            color: #888;
+            font-weight: bold;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-size: 17px;
+            font-weight: bold;
+            color: #333;
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           STUDY DAYS
+        ========================= */
+
+        .day-card {
+            background: #fafaff;
+            border: 1px solid #e7e5ff;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .day-number {
+            color: #6c63ff;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .duration {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #555;
+            white-space: nowrap;
+        }
+
+
+        /* =========================
+           FOCUS
+        ========================= */
+
+        .focus {
+            background: #eeeaff;
+            color: #4d43bb;
+            padding: 13px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           TASKS
+        ========================= */
+
+        .tasks-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .task {
+            background: white;
+            padding: 12px 15px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            border: 1px solid #eeeeee;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .task::before {
+            content: "✓";
+            color: #6c63ff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+
+        /* =========================
+           FINAL REVISION
+        ========================= */
+
+        .revision-card {
+            background: #fff8e8;
+            border: 1px solid #f5dfaa;
+            border-radius: 16px;
+            padding: 22px;
+            margin-top: 25px;
+        }
+
+        .revision-card h3 {
+            margin-top: 0;
+            color: #8b6500;
+            margin-bottom: 15px;
+        }
+
+        .revision-item {
+            padding: 9px 0;
+            color: #5f4d12;
+            font-size: 14px;
+        }
+
+        .revision-item::before {
+            content: "→";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           MOTIVATION
+        ========================= */
+
+        .motivation {
+            margin-top: 20px;
+            background: #f1edff;
+            color: #5547b8;
+            padding: 18px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+
+        /* =========================
+           NO SUBJECTS
+        ========================= */
+
+        .empty {
+            background: #fff8e8;
+            border: 1px solid #f2dfaa;
+            color: #725d16;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .empty a {
+            color: #5b4bdb;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .nav-links {
+                gap: 10px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .nav-links a {
+                display: none;
+            }
+
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .header p {
+                font-size: 14px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .plan-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .day-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .plan-title {
+                font-size: 21px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav>
+
+    <div class="logo">
+        StudyFlow AI
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'subjects' %}">
+            Subjects
+        </a>
+
+        <a href="{% url 'tasks' %}">
+            Tasks
+        </a>
+
+        <a href="{% url 'ai_planner' %}">
+            AI Planner
+        </a>
+
+        <a href="{% url 'settings' %}">
+            Settings
+        </a>
+
+
+        <form
+            action="{% url 'logout' %}"
+            method="post"
+            style="display:inline;"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- PAGE HEADER -->
+
+    <div class="header">
+
+        <div class="ai-badge">
+            ✨ AI-POWERED STUDY PLANNER
+        </div>
+
+
+        <h1>
+            Plan smarter. Study better.
+        </h1>
+
+
+        <p>
+            Tell StudyFlow AI about your subject, topics
+            and study goals. We'll create a personalized
+            study plan for you.
+        </p>
+
+    </div>
+
+
+
+    <!-- =================================================
+         ERROR
+    ================================================== -->
+
+    {% if error %}
+
+        <div class="error">
+
+            ⚠️ {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         FORM CARD
+    ================================================== -->
+
+    <div class="card">
+
+        <h2>
+            🎯 Create Your Study Plan
+        </h2>
+
+
+        <p style="color:#777; line-height:1.5;">
+
+            Enter your study details below and let
+            StudyFlow AI organize your preparation.
+
+        </p>
+
+
+        {% if not subjects %}
+
+            <div class="empty">
+
+                You don't have any subjects yet.
+
+                <br><br>
+
+                Please add a subject first from
+
+                <a href="{% url 'subjects' %}">
+                    Subjects
+                </a>.
+
+            </div>
+
+        {% endif %}
+
+
+        <form method="post">
+
+            {% csrf_token %}
+
+
+            <div class="form-grid">
+
+
+                <!-- SUBJECT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Subject
+                    </label>
+
+
+                    <select
+                        name="subject"
+                        required
+                    >
+
+                        <option value="">
+                            Select a subject
+                        </option>
+
+
+                        {% for subject in subjects %}
+
+                            <option
+                                value="{{ subject.id }}"
+                            >
+
+                                {{ subject.name }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- EXAM DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Exam Date
+                    </label>
+
+
+                    <input
+                        type="date"
+                        name="exam_date"
+                        required
+                    >
+
+                </div>
+
+
+
+                <!-- TOPICS -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Topics to Study
+                    </label>
+
+
+                    <textarea
+                        name="topics"
+                        placeholder="Example: Arrays, Linked Lists, Stacks, Queues, Trees"
+                        required
+                    ></textarea>
+
+
+                    <div class="help-text">
+
+                        Separate multiple topics using commas.
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STUDY HOURS -->
+
+                <div class="form-group">
+
+                    <label>
+                        Study Hours Per Day
+                    </label>
+
+
+                    <select
+                        name="study_hours"
+                        required
+                    >
+
+                        <option value="1">
+                            1 hour
+                        </option>
+
+                        <option
+                            value="2"
+                            selected
+                        >
+                            2 hours
+                        </option>
+
+                        <option value="3">
+                            3 hours
+                        </option>
+
+                        <option value="4">
+                            4 hours
+                        </option>
+
+                        <option value="5">
+                            5 hours
+                        </option>
+
+                        <option value="6">
+                            6 hours
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- DIFFICULTY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Difficulty Level
+                    </label>
+
+
+                    <select
+                        name="difficulty"
+                        required
+                    >
+
+                        <option value="Easy">
+                            Easy
+                        </option>
+
+                        <option
+                            value="Medium"
+                            selected
+                        >
+                            Medium
+                        </option>
+
+                        <option value="Hard">
+                            Hard
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <!-- PREFERRED TIME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Preferred Study Time
+                    </label>
+
+
+                    <select
+                        name="preferred_time"
+                        required
+                    >
+
+                        <option value="Morning">
+                            🌅 Morning
+                        </option>
+
+                        <option value="Afternoon">
+                            ☀️ Afternoon
+                        </option>
+
+                        <option
+                            value="Evening"
+                            selected
+                        >
+                            🌆 Evening
+                        </option>
+
+                        <option value="Night">
+                            🌙 Night
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- GENERATE BUTTON -->
+
+            <button
+                type="submit"
+                class="generate-btn"
+            >
+
+                ✨ Generate My AI Study Plan
+
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+
+    <!-- =================================================
+         GENERATED PLAN
+    ================================================== -->
+
+    {% if plan %}
+
+        <div class="card">
+
+
+            <!-- PLAN HEADER -->
+
+            <div class="plan-header">
+
+                <div class="plan-title">
+
+                    📚 Your AI Study Plan
+
+                </div>
+
+
+                <div class="generated">
+
+                    ✓ PLAN GENERATED
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SUMMARY -->
+
+            <div class="summary-grid">
+
+
+                <!-- SUBJECT -->
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        SUBJECT
+                    </div>
+
+
+                    <div class="summary-value">
+
+                        {{ plan.subject }}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- EXAM DATE -->
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        EXAM DATE
+                    </div>
+
+
+                    <div class="summary-value">
+
+                        {{ plan.exam_date }}
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DAILY STUDY -->
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        DAILY STUDY
+                    </div>
+
+
+                    <div class="summary-value">
+
+                        {{ plan.study_hours }} hrs
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- DIFFICULTY -->
+
+                <div class="summary-card">
+
+                    <div class="summary-label">
+                        DIFFICULTY
+                    </div>
+
+
+                    <div class="summary-value">
+
+                        {{ plan.difficulty }}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- STUDY SCHEDULE -->
+
+            <h2 style="margin-bottom:20px;">
+
+                📅 Study Schedule
+
+            </h2>
+
+
+
+            {% if plan.days %}
+
+
+                {% for day in plan.days %}
+
+                    <div class="day-card">
+
+
+                        <!-- DAY HEADER -->
+
+                        <div class="day-header">
+
+
+                            <div>
+
+                                <div class="day-number">
+
+                                    DAY {{ day.day }}
+
+                                </div>
+
+
+                                <div
+                                    class="day-title"
+                                    style="margin-top:8px;"
+                                >
+
+                                    {{ day.title }}
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="duration">
+
+                                ⏱ {{ day.duration }}
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- FOCUS -->
+
+                        <div class="focus">
+
+                            📘
+
+                            <strong>
+                                Focus:
+                            </strong>
+
+                            {{ day.focus }}
+
+                        </div>
+
+
+
+                        <!-- TASKS -->
+
+                        <div class="tasks-title">
+
+                            Today's Tasks
+
+                        </div>
+
+
+                        {% if day.tasks %}
+
+
+                            {% for task in day.tasks %}
+
+                                <div class="task">
+
+                                    {{ task }}
+
+                                </div>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+                            <div class="task">
+
+                                Study and practice the
+                                selected topic.
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+                {% endfor %}
+
+
+            {% else %}
+
+                <div class="empty">
+
+                    No daily schedule was generated.
+
+                </div>
+
+            {% endif %}
+
+
+
+            <!-- =================================================
+                 FINAL REVISION
+            ================================================== -->
+
+            <div class="revision-card">
+
+
+                <h3>
+
+                    🎯 Final Revision
+
+                </h3>
+
+
+                {% if plan.final_revision %}
+
+
+                    {% for item in plan.final_revision %}
+
+                        <div class="revision-item">
+
+                            {{ item }}
+
+                        </div>
+
+                    {% endfor %}
+
+
+                {% else %}
+
+                    <div class="revision-item">
+
+                        Revise important concepts.
+
+                    </div>
+
+                    <div class="revision-item">
+
+                        Practice previous questions.
+
+                    </div>
+
+                    <div class="revision-item">
+
+                        Review weak topics.
+
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 MOTIVATION
+            ================================================== -->
+
+            <div class="motivation">
+
+                💜
+
+                {% if plan.motivation %}
+
+                    {{ plan.motivation }}
+
+                {% else %}
+
+                    Small progress every day
+                    leads to big results! 🚀
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+
+</body>
+
+</html>

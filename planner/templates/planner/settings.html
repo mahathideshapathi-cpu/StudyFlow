@@ -1,0 +1,479 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | StudyFlow AI</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        .navbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+            color: #4f46e5;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            text-decoration: none;
+            color: #555;
+            padding: 10px 13px;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .nav-btn.active {
+            background: #eef2ff;
+            color: #4f46e5;
+            font-weight: 600;
+        }
+
+        .nav-btn i {
+            margin-right: 5px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .section-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: #eef2ff;
+            color: #4f46e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+        }
+
+        .section-title h2 {
+            font-size: 20px;
+        }
+
+        .section-title p {
+            color: #777;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #d9dce5;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        .help-text {
+            color: #8a8f9c;
+            font-size: 12px;
+            margin-top: 6px;
+        }
+
+        .save-btn {
+            border: none;
+            background: #4f46e5;
+            color: white;
+            padding: 13px 22px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .message {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+            padding: 13px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .account-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .info-box {
+            background: #f8f9fc;
+            border-radius: 12px;
+            padding: 17px;
+        }
+
+        .info-label {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        @media (max-width: 900px) {
+            .nav-links {
+                display: none;
+            }
+
+            .navbar {
+                padding: 0 18px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin-top: 25px;
+            }
+
+            .settings-card {
+                padding: 22px;
+            }
+
+            .account-info {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        StudyFlow AI
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}" class="nav-btn">
+            <i class="fa-solid fa-house"></i>
+            Dashboard
+        </a>
+
+        <a href="{% url 'subjects' %}" class="nav-btn">
+            <i class="fa-solid fa-book-open"></i>
+            Subjects
+        </a>
+
+        <a href="{% url 'tasks' %}" class="nav-btn">
+            <i class="fa-solid fa-list-check"></i>
+            Tasks
+        </a>
+
+        <a href="{% url 'ai_planner' %}" class="nav-btn">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            AI Planner
+        </a>
+
+        <a href="{% url 'saved_plans' %}" class="nav-btn">
+            <i class="fa-solid fa-folder-open"></i>
+            My Plans
+        </a>
+
+        <a href="{% url 'settings' %}" class="nav-btn active">
+            <i class="fa-solid fa-gear"></i>
+            Settings
+        </a>
+
+        <a href="{% url 'logout' %}" class="nav-btn">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="header">
+        <h1>⚙️ Settings</h1>
+        <p>Customize your StudyFlow AI experience.</p>
+    </div>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                <i class="fa-solid fa-circle-check"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <!-- Study Preferences -->
+
+    <div class="settings-card">
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                <i class="fa-solid fa-sliders"></i>
+            </div>
+
+            <div>
+                <h2>Study Preferences</h2>
+                <p>Set your daily study preferences.</p>
+            </div>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+
+                <label for="daily_study_goal">
+                    Daily Study Goal
+                </label>
+
+                <input
+                    type="number"
+                    id="daily_study_goal"
+                    name="daily_study_goal"
+                    min="1"
+                    max="24"
+                    value="{{ profile.daily_study_goal }}"
+                    required
+                >
+
+                <div class="help-text">
+                    Number of hours you want to study each day.
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="preferred_study_time">
+                    Preferred Study Time
+                </label>
+
+                <select
+                    id="preferred_study_time"
+                    name="preferred_study_time"
+                >
+
+                    <option value="Morning"
+                        {% if profile.preferred_study_time == "Morning" %}selected{% endif %}>
+                        🌅 Morning
+                    </option>
+
+                    <option value="Afternoon"
+                        {% if profile.preferred_study_time == "Afternoon" %}selected{% endif %}>
+                        ☀️ Afternoon
+                    </option>
+
+                    <option value="Evening"
+                        {% if profile.preferred_study_time == "Evening" %}selected{% endif %}>
+                        🌆 Evening
+                    </option>
+
+                    <option value="Night"
+                        {% if profile.preferred_study_time == "Night" %}selected{% endif %}>
+                        🌙 Night
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button type="submit" class="save-btn">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Changes
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- Account Information -->
+
+    <div class="settings-card">
+
+        <div class="section-title">
+
+            <div class="section-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+
+            <div>
+                <h2>Account Information</h2>
+                <p>Your StudyFlow AI account details.</p>
+            </div>
+
+        </div>
+
+
+        <div class="account-info">
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    NAME
+                </div>
+
+                <div class="info-value">
+                    {{ request.user.first_name|default:request.user.username }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    USERNAME
+                </div>
+
+                <div class="info-value">
+                    {{ request.user.username }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    EMAIL
+                </div>
+
+                <div class="info-value">
+                    {{ request.user.email|default:"Not provided" }}
+                </div>
+
+            </div>
+
+
+            <div class="info-box">
+
+                <div class="info-label">
+                    MEMBER SINCE
+                </div>
+
+                <div class="info-value">
+                    {{ request.user.date_joined|date:"d M Y" }}
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

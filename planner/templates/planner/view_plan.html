@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ plan.title }} - StudyFlow AI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f6fb;
+            color: #222;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            background: white;
+            padding: 18px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            color: #5b4bdb;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .nav-links a:hover {
+            color: #5b4bdb;
+        }
+
+        .logout-btn {
+            background: #f1efff;
+            color: #5b4bdb;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+
+        /* =========================
+           TOP
+        ========================= */
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 15px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: #5b4bdb;
+            background: #eeeaff;
+            padding: 10px 16px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .new-plan-btn {
+            text-decoration: none;
+            color: white;
+            background: #6c63ff;
+            padding: 10px 16px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .new-plan-btn:hover {
+            background: #574ee8;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #ebe8ff;
+            color: #5b4bdb;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .header-card h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .created {
+            color: #888;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #eeeeee;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .summary-label {
+            color: #888;
+            font-size: 11px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 17px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        /* =========================
+           SECTION
+        ========================= */
+
+        .section-title {
+            font-size: 23px;
+            margin: 30px 0 18px;
+        }
+
+        /* =========================
+           DAY CARD
+        ========================= */
+
+        .day-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 18px;
+            border: 1px solid #e7e5ff;
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.04);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 15px;
+        }
+
+        .day-number {
+            color: #6c63ff;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 7px;
+        }
+
+        .duration {
+            background: #f8f8ff;
+            border: 1px solid #ddd;
+            padding: 9px 13px;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .focus {
+            background: #eeeaff;
+            color: #4d43bb;
+            padding: 14px;
+            border-radius: 11px;
+            margin-bottom: 18px;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .tasks-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .task {
+            background: #fafafa;
+            border: 1px solid #eeeeee;
+            padding: 12px 15px;
+            border-radius: 9px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .task::before {
+            content: "✓";
+            color: #6c63ff;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        /* =========================
+           REVISION
+        ========================= */
+
+        .revision-card {
+            background: #fff8e8;
+            border: 1px solid #f5dfaa;
+            border-radius: 18px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .revision-card h2 {
+            margin-top: 0;
+            color: #8b6500;
+        }
+
+        .revision-item {
+            padding: 9px 0;
+            color: #5f4d12;
+            font-size: 14px;
+        }
+
+        .revision-item::before {
+            content: "→";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           MOTIVATION
+        ========================= */
+
+        .motivation {
+            margin-top: 20px;
+            background: #f1edff;
+            color: #5547b8;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links a {
+                display: none;
+            }
+
+            .container {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-btn,
+            .new-plan-btn {
+                text-align: center;
+            }
+
+            .header-card {
+                padding: 22px;
+            }
+
+            .header-card h1 {
+                font-size: 26px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .day-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav>
+
+    <div class="logo">
+        StudyFlow AI
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'subjects' %}">
+            Subjects
+        </a>
+
+        <a href="{% url 'tasks' %}">
+            Tasks
+        </a>
+
+        <a href="{% url 'ai_planner' %}">
+            AI Planner
+        </a>
+
+        <a href="{% url 'saved_plans' %}">
+            My Plans
+        </a>
+
+        <a href="{% url 'settings' %}">
+            Settings
+        </a>
+
+
+        <form
+            action="{% url 'logout' %}"
+            method="post"
+            style="display:inline;"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </form>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- TOP BUTTONS -->
+
+    <div class="top-bar">
+
+        <a
+            href="{% url 'saved_plans' %}"
+            class="back-btn"
+        >
+            ← Back to My Plans
+        </a>
+
+
+        <a
+            href="{% url 'ai_planner' %}"
+            class="new-plan-btn"
+        >
+            ✨ Create New Plan
+        </a>
+
+    </div>
+
+
+
+    <!-- =================================================
+         PLAN HEADER
+    ================================================== -->
+
+    <div class="header-card">
+
+        <div class="badge">
+            ✨ SAVED AI STUDY PLAN
+        </div>
+
+        <h1>
+            {{ plan.title }}
+        </h1>
+
+        <div class="created">
+
+            Created on
+
+            {{ plan.created_at|date:"d M Y, h:i A" }}
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         SUMMARY
+    ================================================== -->
+
+    <div class="summary-grid">
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                SUBJECT
+            </div>
+
+            <div class="summary-value">
+                {{ plan.plan_data.subject }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                EXAM DATE
+            </div>
+
+            <div class="summary-value">
+                {{ plan.plan_data.exam_date }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                DAILY STUDY
+            </div>
+
+            <div class="summary-value">
+                {{ plan.plan_data.study_hours }}
+                hrs
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-label">
+                DIFFICULTY
+            </div>
+
+            <div class="summary-value">
+                {{ plan.plan_data.difficulty }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         STUDY SCHEDULE
+    ================================================== -->
+
+    <h2 class="section-title">
+        📅 Study Schedule
+    </h2>
+
+
+    {% if plan.plan_data.days %}
+
+
+        {% for day in plan.plan_data.days %}
+
+
+            <div class="day-card">
+
+
+                <div class="day-header">
+
+                    <div>
+
+                        <div class="day-number">
+                            DAY {{ day.day }}
+                        </div>
+
+                        <div class="day-title">
+                            {{ day.title }}
+                        </div>
+
+                    </div>
+
+
+                    <div class="duration">
+
+                        ⏱ {{ day.duration }}
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOCUS -->
+
+                <div class="focus">
+
+                    📘
+
+                    <strong>
+                        Focus:
+                    </strong>
+
+                    {{ day.focus }}
+
+                </div>
+
+
+                <!-- TASKS -->
+
+                <div class="tasks-title">
+                    Today's Tasks
+                </div>
+
+
+                {% if day.tasks %}
+
+                    {% for task in day.tasks %}
+
+                        <div class="task">
+                            {{ task }}
+                        </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="task">
+                        Study and practice the selected topic.
+                    </div>
+
+                {% endif %}
+
+
+            </div>
+
+
+        {% endfor %}
+
+
+    {% else %}
+
+        <div class="day-card">
+
+            No daily schedule available.
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =================================================
+         FINAL REVISION
+    ================================================== -->
+
+    <div class="revision-card">
+
+        <h2>
+            🎯 Final Revision
+        </h2>
+
+
+        {% if plan.plan_data.final_revision %}
+
+
+            {% for item in plan.plan_data.final_revision %}
+
+                <div class="revision-item">
+                    {{ item }}
+                </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="revision-item">
+                Revise important concepts.
+            </div>
+
+            <div class="revision-item">
+                Practice previous questions.
+            </div>
+
+            <div class="revision-item">
+                Review weak topics.
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         MOTIVATION
+    ================================================== -->
+
+    <div class="motivation">
+
+        💜
+
+        {% if plan.plan_data.motivation %}
+
+            {{ plan.plan_data.motivation }}
+
+        {% else %}
+
+            Small progress every day leads to big results! 🚀
+
+        {% endif %}
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

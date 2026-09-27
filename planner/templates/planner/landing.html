@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>StudyFlow AI - Smart Study Planner</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f9ff;
+            color: #1f2937;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 72px;
+
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-login {
+            text-decoration: none;
+            color: #4b5563;
+            padding: 10px 18px;
+        }
+
+        .nav-signup {
+            text-decoration: none;
+            background: #6c63ff;
+            color: white;
+
+            padding: 10px 18px;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+        }
+
+        /* HERO */
+
+        .hero {
+            max-width: 1150px;
+
+            margin: auto;
+
+            padding: 90px 30px;
+
+            display: grid;
+
+            grid-template-columns: 1.1fr 0.9fr;
+
+            gap: 60px;
+
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+
+            background: #eeecff;
+
+            color: #5b52d6;
+
+            padding: 8px 14px;
+
+            border-radius: 20px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 55px;
+
+            line-height: 1.1;
+
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: #6c63ff;
+        }
+
+        .hero p {
+            font-size: 19px;
+
+            line-height: 1.7;
+
+            color: #6b7280;
+
+            margin-bottom: 30px;
+
+            max-width: 600px;
+        }
+
+        .hero-buttons {
+            display: flex;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .primary-btn {
+            display: inline-block;
+
+            background: #6c63ff;
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 14px 25px;
+
+            border-radius: 9px;
+
+            font-weight: 600;
+        }
+
+        .secondary-btn {
+            display: inline-block;
+
+            background: white;
+
+            color: #374151;
+
+            text-decoration: none;
+
+            padding: 14px 25px;
+
+            border-radius: 9px;
+
+            border: 1px solid #dfe1e8;
+
+            font-weight: 600;
+        }
+
+        /* DASHBOARD PREVIEW */
+
+        .preview {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            border: 1px solid #e5e7eb;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.08);
+        }
+
+        .preview-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            margin-bottom: 20px;
+        }
+
+        .preview-title {
+            font-size: 18px;
+
+            font-weight: 700;
+        }
+
+        .preview-date {
+            color: #9ca3af;
+
+            font-size: 13px;
+        }
+
+        .progress-card {
+            background: #f6f5ff;
+
+            padding: 18px;
+
+            border-radius: 12px;
+
+            margin-bottom: 15px;
+        }
+
+        .progress-card p {
+            color: #6b7280;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .progress-number {
+            font-size: 30px;
+
+            font-weight: 700;
+
+            color: #6c63ff;
+        }
+
+        .task {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 14px;
+
+            border: 1px solid #eeeeee;
+
+            border-radius: 10px;
+
+            margin-bottom: 10px;
+        }
+
+        .circle {
+            width: 18px;
+
+            height: 18px;
+
+            border: 2px solid #6c63ff;
+
+            border-radius: 50%;
+        }
+
+        .task-info strong {
+            display: block;
+
+            margin-bottom: 4px;
+        }
+
+        .task-info small {
+            color: #9ca3af;
+        }
+
+        /* FEATURES */
+
+        .features {
+            background: white;
+
+            padding: 70px 30px;
+        }
+
+        .features-container {
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+        .section-title {
+            text-align: center;
+
+            margin-bottom: 45px;
+        }
+
+        .section-title h2 {
+            font-size: 34px;
+
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #6b7280;
+
+            font-size: 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .feature {
+            padding: 28px;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            background: #fafaff;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            color: #6b7280;
+
+            line-height: 1.6;
+        }
+
+        /* FOOTER */
+
+        footer {
+            background: #171729;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+        footer span {
+            color: #9b94ff;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .hero {
+                grid-template-columns: 1fr;
+
+                padding-top: 60px;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .nav-login {
+                display: none;
+            }
+
+            .hero {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero p {
+                font-size: 17px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        StudyFlow <span>AI</span>
+    </div>
+
+
+    <div class="nav-buttons">
+
+        <a href="{% url 'login' %}"
+           class="nav-login">
+            Login
+        </a>
+
+        <a href="{% url 'signup' %}"
+           class="nav-signup">
+            Get Started
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+
+    <div>
+
+        <div class="badge">
+            ✨ AI-powered study planning
+        </div>
+
+
+        <h1>
+
+            Study smarter.
+
+            <br>
+
+            <span>Flow better.</span>
+
+        </h1>
+
+
+        <p>
+
+            StudyFlow AI helps students organize subjects,
+            manage topics, plan study sessions, track progress,
+            and create personalized study plans with AI.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a href="{% url 'signup' %}"
+               class="primary-btn">
+
+                Start Planning 🚀
+
+            </a>
+
+
+            <a href="{% url 'login' %}"
+               class="secondary-btn">
+
+                I already have an account
+
+            </a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- DASHBOARD PREVIEW -->
+
+    <div class="preview">
+
+
+        <div class="preview-header">
+
+            <div class="preview-title">
+                Today's Study Plan
+            </div>
+
+            <div class="preview-date">
+                Today
+            </div>
+
+        </div>
+
+
+        <div class="progress-card">
+
+            <p>
+                Daily Progress
+            </p>
+
+            <div class="progress-number">
+                68%
+            </div>
+
+        </div>
+
+
+        <div class="task">
+
+            <div class="circle"></div>
+
+            <div class="task-info">
+
+                <strong>
+                    Data Structures
+                </strong>
+
+                <small>
+                    Arrays · 45 min
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="task">
+
+            <div class="circle"></div>
+
+            <div class="task-info">
+
+                <strong>
+                    Database Management
+                </strong>
+
+                <small>
+                    SQL Queries · 40 min
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="task">
+
+            <div class="circle"></div>
+
+            <div class="task-info">
+
+                <strong>
+                    Java Programming
+                </strong>
+
+                <small>
+                    OOP Concepts · 30 min
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- FEATURES -->
+
+<section class="features">
+
+
+    <div class="features-container">
+
+
+        <div class="section-title">
+
+            <h2>
+                Everything you need to study better
+            </h2>
+
+            <p>
+                One simple workspace for your entire study routine.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🤖
+                </div>
+
+                <h3>
+                    AI Study Planner
+                </h3>
+
+                <p>
+                    Generate personalized study plans
+                    based on your subjects, deadlines,
+                    and available study time.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📚
+                </div>
+
+                <h3>
+                    Subjects & Topics
+                </h3>
+
+                <p>
+                    Organize your subjects into topics
+                    and keep track of what you have completed.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <h3>
+                    Track Progress
+                </h3>
+
+                <p>
+                    See your study progress, completed tasks,
+                    and study time in one place.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+    <p>
+        © 2026 <span>StudyFlow AI</span>.
+        Built for smarter studying.
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

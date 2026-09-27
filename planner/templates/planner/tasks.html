@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudyFlow AI - Tasks</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 30px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .back {
+            text-decoration: none;
+            color: #6c63ff;
+            font-weight: 600;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+
+            padding: 12px;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            background: white;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #6c63ff;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .add-button {
+            margin-top: 20px;
+
+            background: #6c63ff;
+            color: white;
+
+            border: none;
+            border-radius: 8px;
+
+            padding: 12px 24px;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            opacity: 0.9;
+        }
+
+        /* TASK */
+
+        .task {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .task:last-child {
+            margin-bottom: 0;
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+
+            gap: 15px;
+
+            margin-bottom: 10px;
+        }
+
+        .task-title {
+            font-size: 19px;
+            font-weight: bold;
+        }
+
+        .priority {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background: #f0efff;
+            color: #5b54d6;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .task-info {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 7px;
+        }
+
+        .task-description {
+            margin-top: 12px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .completed {
+            color: green;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+
+        .complete-button {
+            display: inline-block;
+
+            margin-top: 14px;
+
+            padding: 9px 14px;
+
+            background: #6c63ff;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 7px;
+
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .complete-button:hover {
+            opacity: 0.9;
+        }
+
+        .empty {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .container {
+                margin: 25px auto;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .task-header {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            StudyFlow <span>AI</span>
+        </div>
+
+        <div class="nav-right">
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="nav-link">
+                Dashboard
+            </a>
+
+            <a
+                href="{% url 'subjects' %}"
+                class="nav-link">
+                Subjects
+            </a>
+
+            <a
+                href="{% url 'settings' %}"
+                class="nav-link">
+                Settings
+            </a>
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="back">
+                ← Dashboard
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <h1>
+                My Tasks 📝
+            </h1>
+
+            <p>
+                Organize your study tasks and stay on track.
+            </p>
+
+        </div>
+
+
+        <!-- ADD TASK -->
+
+        <div class="card">
+
+            <h2>
+                ➕ Add Study Task
+            </h2>
+
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <div class="form-grid">
+
+
+                    <!-- TITLE -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Task Title
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="Example: Complete DSA Unit 2"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Subject
+                        </label>
+
+                        <select name="subject">
+
+                            <option value="">
+                                No Subject
+                            </option>
+
+                            {% for subject in subjects %}
+
+                                <option value="{{ subject.id }}">
+                                    {{ subject.name }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRIORITY -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Priority
+                        </label>
+
+                        <select name="priority">
+
+                            <option value="Low">
+                                Low
+                            </option>
+
+                            <option value="Medium" selected>
+                                Medium
+                            </option>
+
+                            <option value="High">
+                                High
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea
+                            name="description"
+                            placeholder="Describe what you need to study..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Study Date
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- TIME -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Start Time
+                        </label>
+
+                        <input
+                            type="time"
+                            name="start_time"
+                        >
+
+                    </div>
+
+
+                    <!-- DURATION -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Duration (minutes)
+                        </label>
+
+                        <input
+                            type="number"
+                            name="duration"
+                            value="60"
+                            min="5"
+                            max="600"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="add-button">
+
+                    Add Task
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- TASK LIST -->
+
+        <div class="card">
+
+            <h2>
+                📋 My Study Tasks
+            </h2>
+
+
+            {% if tasks %}
+
+
+                {% for task in tasks %}
+
+
+                    <div class="task">
+
+
+                        <div class="task-header">
+
+                            <div class="task-title">
+                                {{ task.title }}
+                            </div>
+
+                            <span class="priority">
+                                {{ task.priority }}
+                            </span>
+
+                        </div>
+
+
+                        {% if task.subject %}
+
+                            <div class="task-info">
+                                📚 {{ task.subject.name }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="task-info">
+                            📅 {{ task.date }}
+                        </div>
+
+
+                        {% if task.start_time %}
+
+                            <div class="task-info">
+                                🕐 {{ task.start_time }}
+                            </div>
+
+                        {% endif %}
+
+
+                        <div class="task-info">
+                            ⏱ {{ task.duration }} minutes
+                        </div>
+
+
+                        {% if task.description %}
+
+                            <div class="task-description">
+                                {{ task.description }}
+                            </div>
+
+                        {% endif %}
+
+
+                        {% if task.status == "Completed" %}
+
+                            <div class="completed">
+                                ✓ Task Completed
+                            </div>
+
+                        {% else %}
+
+                            <a
+                                href="{% url 'complete_task' task.id %}"
+                                class="complete-button">
+
+                                ✓ Mark Completed
+
+                            </a>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            {% else %}
+
+
+                <p class="empty">
+
+                    No tasks yet.
+
+                    Add your first study task above! 📚
+
+                </p>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+    </main>
+
+
+</body>
+
+</html>
